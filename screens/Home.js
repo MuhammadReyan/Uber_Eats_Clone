@@ -11,7 +11,9 @@ import BottomTab from '../components/Home/BottomTab'
 // j8hfTX9_wt_2OaEISrxJuQ  //  Client ID
 
 
-export default function Home() {
+export default function Home({ navigation }) {
+
+
   const [city, setCity] = useState("San Francisco");
   const [restaurantData, setRestaurantData] = useState(localRestaurants)
   console.log(restaurantData, "===<<")
@@ -24,8 +26,9 @@ export default function Home() {
         accept: 'application/json',
       },
     };
-
     fetch(`http://localhost:3001/api/yelp?location=${city}&sort_by=best_match&limit=10`, options)
+
+
       .then((res) => res.json())
       .then((json) =>
         setRestaurantData(
@@ -34,29 +37,29 @@ export default function Home() {
           )
         )
       )
-      .catch(err => console.error(err));
+      .catch(err => console.log(err));
   }, [city, activeTab])
 
 
 
   return (
     <SafeAreaView style={{ backgroundColor: '#eee', flex: 1 }}>
-    <View style={{ backgroundColor: 'white', padding: 10 }}>
-      <HeaderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      <SearchBar cityHandler={setCity} />
-    </View>
+      <View style={{ backgroundColor: 'white', padding: 10 }}>
+        <HeaderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <SearchBar cityHandler={setCity} />
+      </View>
 
-    <View style={{ flex: 1 }}>
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <Categoires />
-        <RestaurantItems restaurantData={restaurantData} />
+        <RestaurantItems navigation={navigation} restaurantData={restaurantData} />
       </ScrollView>
-    </View>
 
-    <Divider width={1} />
 
-    <BottomTab />
-  </SafeAreaView>
+      <Divider width={1} />
+
+      <BottomTab />
+    </SafeAreaView>
   )
 }
 
